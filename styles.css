@@ -1,0 +1,221 @@
+/* Train Fare BD -- clean, mobile-first, no external assets. */
+:root {
+  --green: #0b6b3a;
+  --green-dark: #08522d;
+  --red: #b3261e;
+  --ink: #1c2430;
+  --muted: #5b6672;
+  --line: #dfe5ea;
+  --bg: #f4f6f3;
+  --card: #ffffff;
+  --chip: #e8f0e9;
+  --amber: #8a5a00;
+  --amber-bg: #fff4d6;
+  --blue: #1d4e89;
+  --blue-bg: #e3ecf7;
+  --purple: #6b2d8f;
+  --purple-bg: #f3e8f7;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.45;
+}
+.app-header {
+  background: var(--green);
+  color: #fff;
+  padding: 16px 16px 0;
+}
+.header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; max-width: 760px; margin: 0 auto; }
+.app-header h1 { margin: 0; font-size: 1.35rem; line-height: 1.25; }
+.app-header .sub { margin: 4px 0 0; opacity: 0.9; font-size: 0.9rem; }
+.lang-btn {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tabs { display: flex; gap: 4px; max-width: 760px; margin: 14px auto 0; overflow-x: auto; }
+.tab {
+  flex: 1 1 auto;
+  background: transparent;
+  color: #d7e8dc;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 10px 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab.active { color: #fff; border-bottom-color: #ffd23f; font-weight: 700; }
+main { max-width: 760px; margin: 0 auto; padding: 16px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+.panel h2 { margin: 0 0 12px; font-size: 1.15rem; }
+.panel h3 { margin: 16px 0 6px; font-size: 1rem; }
+.panel h3:first-child { margin-top: 0; }
+.calc-form {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: end;
+}
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+.field .hint { font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+select, input[type="number"], input[type="text"], textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+}
+textarea { resize: vertical; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem; }
+.swap-btn {
+  background: var(--chip);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 1.3rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: var(--green);
+}
+.check-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.check-row input { width: auto; accent-color: var(--green); }
+.primary-btn {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  grid-column: 1 / -1;
+}
+.primary-btn:hover { background: var(--green-dark); }
+.danger-btn {
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.error { color: var(--red); font-weight: 600; margin: 12px 0 0; }
+.ok-msg { color: var(--green); font-weight: 600; margin: 12px 0 0; }
+.summary { color: var(--muted); font-weight: 600; margin: 14px 0 0; }
+.hint { color: var(--muted); font-size: 0.9rem; margin: 8px 0 0; }
+.results { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.empty { color: var(--muted); margin: 16px 0 0; }
+.intro { color: var(--muted); margin: 0 0 4px; }
+
+/* ---- result breakdown ---- */
+.result { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+.result h2 { margin-bottom: 4px; }
+.result-route { color: var(--muted); font-weight: 600; margin: 0 0 10px; }
+.breakdown { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.breakdown th, .breakdown td { text-align: left; padding: 7px 4px; border-bottom: 1px solid var(--line); }
+.breakdown td { text-align: right; font-weight: 600; white-space: nowrap; }
+.breakdown tfoot th, .breakdown tfoot td { border-bottom: none; font-size: 1.15rem; color: var(--green-dark); }
+.breakdown tfoot td.total { font-size: 1.3rem; }
+.note { font-size: 0.88rem; color: var(--muted); margin: 10px 0 0; }
+.save-row { display: flex; gap: 8px; margin-top: 14px; }
+.save-row input { flex: 1; min-width: 0; }
+.save-btn {
+  background: #fff;
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.save-btn:hover { background: var(--chip); }
+
+/* ---- fare table ---- */
+.search { margin-bottom: 4px; width: 100%; padding: 10px; font-size: 1rem; border: 1px solid var(--line); border-radius: 8px; }
+.table-wrap { overflow-x: auto; margin-top: 10px; }
+.fare-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.fare-table th, .fare-table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.fare-table thead th { background: var(--chip); color: var(--green-dark); font-size: 0.88rem; }
+.fare-row { cursor: pointer; }
+.fare-row:hover { background: #f6faf6; }
+.fare-cell { font-weight: 700; white-space: nowrap; text-align: right; }
+.route-trains { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
+.badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 2px 9px;
+  background: var(--chip);
+  color: var(--green-dark);
+  margin: 4px 4px 0 0;
+}
+.badge.ac { background: var(--blue-bg); color: var(--blue); }
+.badge.estimated { background: var(--amber-bg); color: var(--amber); }
+.badge.single { background: var(--purple-bg); color: var(--purple); }
+.badge.varies { background: #fbe3e1; color: var(--red); }
+
+/* ---- class guide / saved cards ---- */
+.train-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.train-name { font-weight: 700; font-size: 1.05rem; }
+.train-no { color: var(--muted); font-size: 0.9rem; }
+.total-strong { font-weight: 700; color: var(--green-dark); font-size: 1.05rem; }
+.class-card, .trip-card { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.class-desc { margin: 8px 0 0; }
+.class-routes { margin: 8px 0 0; font-size: 0.88rem; color: var(--muted); }
+.trip-card .trip-detail { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+.row-btns { display: flex; gap: 8px; margin-top: 10px; }
+.delete-btn {
+  background: #fff;
+  border: 1.5px solid var(--red);
+  color: var(--red);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---- rules / data ---- */
+.rules p { margin: 0 0 6px; color: var(--ink); }
+.data-block { margin-bottom: 20px; }
+.data-block .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.data-block label { font-weight: 600; font-size: 0.92rem; }
+.data-block textarea { margin-top: 8px; }
+.data-block.danger { border: 1px solid #f3c1bd; background: #fdf6f5; border-radius: 10px; padding: 12px; }
+.data-block.sources { border-top: 1px solid var(--line); padding-top: 14px; }
+.data-block.sources ul { margin: 0 0 10px; padding-left: 20px; font-size: 0.92rem; color: var(--muted); }
+.disclaimer { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+.file-label { font-weight: 400; }
+.app-footer { max-width: 760px; margin: 0 auto; padding: 8px 16px 24px; color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 560px) {
+  .calc-form { grid-template-columns: 1fr auto 1fr; }
+  .app-header h1 { font-size: 1.2rem; }
+  main { padding: 12px; }
+  .panel { padding: 12px; }
+  .save-row { flex-direction: column; }
+  .save-row .save-btn { width: 100%; }
+}

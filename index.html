@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Train Fare BD &mdash; Bangladesh Railway intercity fares</title>
+<meta name="description" content="Offline bilingual (English / Bengali) Bangladesh Railway intercity fare calculator and fare table.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="app-header">
+  <div class="header-row">
+    <div>
+      <h1 id="title" data-i18n="appTitle">Bangladesh Train Fares</h1>
+      <p class="sub" id="subtitle" data-i18n="appSub">Intercity train fares &mdash; offline, bilingual</p>
+    </div>
+    <button id="langBtn" class="lang-btn" type="button" aria-label="Switch language">&#2476;&#2494;&#2434;&#2482;&#2494;</button>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab active" data-tab="calc" role="tab" type="button" data-i18n="tabCalc">Calculator</button>
+    <button class="tab" data-tab="table" role="tab" type="button" data-i18n="tabTable">Fare Table</button>
+    <button class="tab" data-tab="classes" role="tab" type="button" data-i18n="tabClasses">Class Guide</button>
+    <button class="tab" data-tab="rules" role="tab" type="button" data-i18n="tabRules">Fare Rules</button>
+    <button class="tab" data-tab="data" role="tab" type="button" data-i18n="tabData">Data</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ============ CALCULATOR ============ -->
+  <section id="tab-calc" class="panel" role="tabpanel">
+    <form id="calcForm" class="calc-form" novalidate>
+      <div class="field">
+        <label for="fromSelect" data-i18n="from">From</label>
+        <select id="fromSelect"></select>
+      </div>
+      <button id="swapBtn" class="swap-btn" type="button" title="Swap stations" aria-label="Swap stations">&#8646;</button>
+      <div class="field">
+        <label for="toSelect" data-i18n="to">To</label>
+        <select id="toSelect"></select>
+      </div>
+      <div class="field">
+        <label for="routeSelect" data-i18n="route">Route</label>
+        <select id="routeSelect"></select>
+      </div>
+      <div class="field">
+        <label for="classSelect" data-i18n="seatClass">Seat class</label>
+        <select id="classSelect"></select>
+      </div>
+      <div class="field">
+        <label for="adultsInput" data-i18n="adults">Adults (10+)</label>
+        <input id="adultsInput" type="number" min="0" max="6" step="1" value="1">
+      </div>
+      <div class="field">
+        <label for="childrenInput" data-i18n="children39">Children (3&ndash;9 years)</label>
+        <input id="childrenInput" type="number" min="0" max="6" step="1" value="0">
+      </div>
+      <div class="field">
+        <label for="under3Input" data-i18n="under3">Children under 3</label>
+        <input id="under3Input" type="number" min="0" max="6" step="1" value="0">
+        <span class="hint" data-i18n="under3Hint">Free &mdash; counted only</span>
+      </div>
+      <label class="check-row">
+        <input id="onlineCheck" type="checkbox">
+        <span data-i18n="online">Online booking (+20 Tk per paying seat)</span>
+      </label>
+      <button id="calcBtn" class="primary-btn" type="submit" data-i18n="calcBtn">Calculate fare</button>
+    </form>
+    <p id="calcError" class="error" hidden></p>
+    <div id="resultBox" class="result" hidden>
+      <h2 id="resultTitle" data-i18n="resultTitle">Your fare</h2>
+      <p id="resultRoute" class="result-route"></p>
+      <table class="breakdown">
+        <tbody id="breakdownBody"></tbody>
+        <tfoot>
+          <tr><th id="grandTotalLabel" data-i18n="grandTotal">Grand total</th><td id="grandTotalCell" class="total"></td></tr>
+        </tfoot>
+      </table>
+      <p id="roundingNote" class="note" hidden data-i18n="roundingNote">Child fare is exactly half the adult fare, so the total can end in .5 Tk &mdash; it is rounded to the nearest whole taka.</p>
+      <div class="save-row">
+        <input id="calcName" type="text" maxlength="60" data-i18n-ph="calcNamePh" placeholder="Name (optional)">
+        <button id="saveCalcBtn" class="save-btn" type="button" data-i18n="saveCalcBtn">Save calculation</button>
+      </div>
+      <p id="saveMsg" class="ok-msg" hidden></p>
+    </div>
+  </section>
+
+  <!-- ============ FARE TABLE ============ -->
+  <section id="tab-table" class="panel" hidden role="tabpanel">
+    <input id="tableSearch" class="search" type="search" data-i18n-ph="searchPh" placeholder="Search by station or class&hellip;" aria-label="Search fares">
+    <p id="tableCount" class="summary"></p>
+    <p class="hint" data-i18n="tapRow">Tap a row to load it into the calculator.</p>
+    <div class="table-wrap">
+      <table class="fare-table">
+        <thead>
+          <tr>
+            <th data-i18n="routeCol">Route</th>
+            <th data-i18n="classCol">Class</th>
+            <th data-i18n="fareCol">Fare (one-way)</th>
+          </tr>
+        </thead>
+        <tbody id="fareTableBody"></tbody>
+      </table>
+    </div>
+    <p id="tableEmpty" class="empty" hidden>No fares match your search.</p>
+  </section>
+
+  <!-- ============ CLASS GUIDE ============ -->
+  <section id="tab-classes" class="panel" hidden role="tabpanel">
+    <p id="guideIntro" class="intro" data-i18n="guideIntro">Every class Bangladesh Railway runs on intercity trains. Which classes each route offers is in the Fare Table.</p>
+    <div id="classList" class="results"></div>
+  </section>
+
+  <!-- ============ FARE RULES ============ -->
+  <section id="tab-rules" class="panel" hidden role="tabpanel">
+    <h2 data-i18n="rulesTitle">Fare rules</h2>
+    <div class="rules">
+      <h3 data-i18n="rulePontageTitle">Pontage (bridge) charge &mdash; Dec 2025</h3>
+      <p data-i18n="rulePontage">Fares rose on 20 Dec 2025 when the pontage (bridge-crossing) charge changed. All fares in this app are the post-change fares as reported in Dec 2025.</p>
+      <h3 data-i18n="ruleVatTitle">VAT</h3>
+      <p data-i18n="ruleVat">15% VAT is included in AC fares (Snigdha, AC Seat, AC Berth, AC Chair). Non-AC fares carry no VAT.</p>
+      <h3 data-i18n="ruleOnlineTitle">Online booking fee</h3>
+      <p data-i18n="ruleOnline">Booking on eticket.railway.gov.bd adds 20 Tk per paying seat (adults and children aged 3&ndash;9). Children under 3 travel free and pay no fee.</p>
+      <h3 data-i18n="ruleChildTitle">Children</h3>
+      <p data-i18n="ruleChild">Children under 3 travel free. Children aged 3&ndash;9 pay half the adult fare. Children aged 10 and above pay the full adult fare.</p>
+      <h3 data-i18n="ruleBookingTitle">When to book</h3>
+      <p data-i18n="ruleBooking">Tickets open 10 days ahead at 8:00 AM on eticket.railway.gov.bd and at station counters.</p>
+      <h3 data-i18n="ruleVerifyTitle">Always verify</h3>
+      <p data-i18n="ruleVerify">Fares can change. Verify the final fare on eticket.railway.gov.bd before paying. This app is not affiliated with Bangladesh Railway.</p>
+    </div>
+  </section>
+
+  <!-- ============ DATA ============ -->
+  <section id="tab-data" class="panel" hidden role="tabpanel">
+    <h2 data-i18n="savedTitle">Saved calculations</h2>
+    <div id="savedList" class="results"></div>
+    <p id="savedEmpty" class="empty" data-i18n="noSaved">No saved calculations yet. Calculate a fare and save it.</p>
+    <div class="data-block">
+      <button id="exportBtn" class="primary-btn" type="button" data-i18n="exportBtn">Download JSON backup</button>
+      <p id="exportMsg" class="ok-msg" hidden></p>
+    </div>
+    <div class="data-block">
+      <label for="importText" data-i18n="importPh">Paste a train-fare-bd JSON backup here&hellip;</label>
+      <textarea id="importText" rows="6" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="importBtn" class="primary-btn" type="button" data-i18n="importBtn">Import</button>
+        <label class="file-label" for="importFile" data-i18n="chooseFile">Or choose a backup file:</label>
+        <input id="importFile" type="file" accept="application/json,.json">
+      </div>
+      <p id="importOk" class="ok-msg" hidden></p>
+      <p id="importFail" class="error" hidden></p>
+    </div>
+    <div class="data-block danger">
+      <label for="eraseInput" data-i18n="eraseHint">Type DELETE to erase all saved calculations.</label>
+      <div class="row">
+        <input id="eraseInput" type="text" autocomplete="off" placeholder="DELETE">
+        <button id="eraseBtn" class="danger-btn" type="button" data-i18n="eraseBtn">Erase all data</button>
+      </div>
+      <p id="eraseWrong" class="error" hidden></p>
+      <p id="erasedMsg" class="ok-msg" hidden></p>
+    </div>
+    <div class="data-block sources">
+      <h3 data-i18n="sourcesTitle">Sources &amp; accuracy</h3>
+      <ul>
+        <li data-i18n="sourceLine1">Fares as reported Dec 2025 (post-pontage change). Every route source is listed in DATA_NOTES.md, including conflicts.</li>
+        <li data-i18n="sourceLine2">Rangpur&ndash;Dhaka fares are labelled ESTIMATED by their source. Feni&ndash;Dhaka rests on a single source. The Cox's Bazar Snigdha fare is reported as 1443, 1449 and 1450 by different sources.</li>
+        <li data-i18n="sourceLine3">No First Berth fare is verified for any route, so First Berth never appears in the fare table or calculator.</li>
+      </ul>
+      <p class="disclaimer" id="disclaimer" data-i18n="disclaimer">Fares as reported Dec 2025 (post-pontage change) &mdash; verify on eticket.railway.gov.bd. Not affiliated with Bangladesh Railway.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p id="footerText" data-i18n="disclaimer">Fares as reported Dec 2025 (post-pontage change) &mdash; verify on eticket.railway.gov.bd. Not affiliated with Bangladesh Railway.</p>
+</footer>
+
+<script src="logic.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

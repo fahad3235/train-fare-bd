@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build artifacts
+dist/
+build/
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Local databases / secrets (this app uses localStorage only; nothing to store)
+*.db
+*.sqlite
+*.env
+*.pem
+*.key
